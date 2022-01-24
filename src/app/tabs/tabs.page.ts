@@ -12,9 +12,8 @@ export class TabsPage {
     private router:Router
   ) {}
 
-  logout(){
-    console.log("Out");
-    
+  logout(){    
     this.router.navigate(['/signin']);
+    localStorage.clear();
   }
 }

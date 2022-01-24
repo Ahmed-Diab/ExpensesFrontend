@@ -21,14 +21,16 @@ export class Interceptor implements HttpInterceptor {
     if (user) {
       const authReq = req.clone({
         setHeaders: {
-          Authorization: 'Bearer ' + JSON.parse(user).token
+          Authorization: 'Bearer ' + JSON.parse(user).token,
+          userId:`${JSON.parse(user).userId}`
         }
       })
       return next.handle(authReq).toPromise()
     } else {
       const authReq = req.clone({
         setHeaders: {
-          Authorization: '{}'
+          Authorization: '{}',
+          userId:'0'
         }
       })
       return next.handle(authReq).toPromise();

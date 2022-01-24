@@ -35,9 +35,15 @@ export class PublicService {
   postMethod(url: string, request: any) {
     return this.http.post<any>(environment.apiURL + url, request).pipe(map((data: any) => { return data }));
   }
+  updateMethod(url: string, request: any) {
+    return this.http.put<any>(environment.apiURL + url, request).pipe(map((data: any) => { return data }));
+  }
 
-  getMethod(url: string, request: any) {
-    return this.http.get<any>(environment.apiURL + url, request).pipe(map((data: any) => { return data }));
+  getMethod(url: string) {
+    return this.http.get<any>(environment.apiURL + url).pipe(map((data: any) => { return data }));
+  }
+  deleteMethod(url: string) {
+    return this.http.delete<any>(environment.apiURL + url).pipe(map((data: any) => { return data }));
   }
 
   async loading() {
@@ -77,6 +83,15 @@ export class PublicService {
       ]
     });
     await alert.present();
+  }
+
+ async showSussessToast(message:string){
+    let toast = await this.toastController.create({
+      header:"عمليه ناجحه",
+      message:message,
+       duration:3000
+    });
+   toast.present();
   }
 
   async getDefultPayment() {

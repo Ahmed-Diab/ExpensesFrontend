@@ -9,16 +9,20 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/home',
         pathMatch: 'full'
       },
       {
-        path: 'tab1',
-        loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+        path: 'home',
+        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
       },
       {
-        path: 'tab2',
-        loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+        path: 'Expenses',
+        loadChildren: () => import('../Expenses/expenses.module').then(m => m.ExpensesPageModule)
+      },
+      {
+        path: 'category',
+        loadChildren: () => import('../category/category.module').then( m => m.CategoryPageModule)
       }
     ]
   },

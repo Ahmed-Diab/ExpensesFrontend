@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>أضافه / تعديل فئه مصروف</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <form (submit)="submitCategory()" novalidate>
+      <ion-list>
+        <ion-item>
+          <ion-label color="primary" position="">
+            <span>اسم الفئه</span>
+          </ion-label>
+          <ion-input [(ngModel)]="name" clearInput name="name" type="text"></ion-input>
+        </ion-item>
+        <ion-row>
+          <ion-col>
+            <ion-button type="submit" expand="block">حفظ</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-list>
+    </form>
+  </div>
+</ion-content>

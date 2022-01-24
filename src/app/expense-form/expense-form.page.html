@@ -4,12 +4,78 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-   <ion-button (click)="startRecording()" expand="block"  shape="round">
-    بدا التسجيل
- </ion-button>
+<ion-content >
+  <div class="container ion-padding" style="padding-bottom: 50px;">
+    <form (submit)="SaveExpense()">
+      <ion-list>
+        <ion-item>
+          <ion-label>فئه المصروف</ion-label>
+          <ion-select okText="أختيار" cancelText="ألغاء" (ngModelChange)="changeCategory($event)"
+            [(ngModel)]="expense.categoryId" name="category">
+            <ion-select-option *ngFor="let cat of categories" [value]="cat.id">{{cat.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
 
- <ion-button (click)="stopRecording()" expand="block" color="primary"  shape="round">
-  ايقاف التسجيل
-</ion-button>
+        <ion-item>
+          <ion-label color="primary" position="">
+            <span>المبلغ :</span>
+          </ion-label>
+          <ion-input clearInput [(ngModel)]="expense.amount" name="amount" type="number"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>ملاحظات :</ion-label>
+          <ion-textarea [(ngModel)]="expense.textNote" name="textNote"></ion-textarea>
+        </ion-item>
+        <ion-item button *ngFor="let f of storedFileNames">
+          {{f}}
+          <ion-button slot="end" (click)="deleteRecording(f)" fill="clear" color="danger">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" (click)="playFile(f)" fill="clear" color="danger">
+            <ion-icon name="play" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding">
+        <ion-button style="position: absolute; left:20px;" *ngIf="expense.imageNoteFormat" slot="end" (click)="removeImage()" fill="clear" color="danger">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <img *ngIf="expense.imageNote" style="max-height: 200px;"
+      [src]="sanitizer.bypassSecurityTrustResourceUrl('data:image/' + expense.imageNoteFormat + ';' + 'base64, ' + expense.imageNote)"
+      alt="" srcset="">
+      </div>
+      
+
+      <ion-col>
+        <ion-button type="submit" expand="block">حفظ</ion-button>
+      </ion-col>
+    </form>
+
+  </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addPhotoToGallery()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+
+<!-- <ion-footer>
+  <ion-toolbar>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="10">
+        <span engIf="! recording">
+          أضغط وانتظر كى يتم التسجيل
+        </span>
+        <span engIf="recording">
+          {{ durationDisplay }}
+        </span>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button fill="clear" #recordbtn>
+          <ion-icon name="mic-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer> -->
