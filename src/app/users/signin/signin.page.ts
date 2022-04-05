@@ -43,21 +43,21 @@ export class SigninPage implements OnInit {
   }
 
   async signinHttp() {
-    this.publicService.loading().then(async () => {
+   await this.publicService.loading();
       this.publicService.postMethod('users/signin', this.loginForm.value).subscribe(async (res: any) => {
         if (res.success) {
           await Storage.set({ key: "user", value: JSON.stringify(res.data) });
-          await this.publicService.killLoading();
              this.router.navigate(['/tabs']);
+         }else{
+          this.publicService.showErrorAlert("Error", res.message);
          }
+         await this.publicService.killLoading();
       }, async (error: HttpErrorResponse) => {
         await this.publicService.killLoading();
         if (error) {
-          this.publicService.showErrorAlert("حدث خطاء", error.message);
+          this.publicService.showErrorAlert("Error", error.message);
         }
       })
-    })
-
   }
 
 

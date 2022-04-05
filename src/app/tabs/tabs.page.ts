@@ -7,12 +7,18 @@ import { Router } from '@angular/router';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
+  tabs: any[] = [
+    { name: "home", icon: "home"},
+    { name: "Expenses", icon: "wallet"},
+    { name: "category", icon: "grid" }
+   
+  ]
 
   constructor(
-    private router:Router
-  ) {}
+    private router: Router
+  ) { }
 
-  logout(){    
+  logout() {
     this.router.navigate(['/signin']);
     localStorage.clear();
   }

@@ -1,13 +1,14 @@
-import { formatDate } from '@angular/common';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
-import { from, throwError } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { Storage } from "@capacitor/storage";
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { formatDate } from '@angular/common';
+import { catchError, map } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+
 const TOKEN_Key = "token";
 const helper = JwtHelperService;
 @Injectable({
@@ -17,11 +18,11 @@ export class PublicService {
 
   constructor(
     public router: Router,
-    public http:HttpClient,
-     public alertController:AlertController,
-    public loadingController:LoadingController,
-    public toastController:ToastController,
-    public modalController:ModalController
+    public http: HttpClient,
+    public alertController: AlertController,
+    public loadingController: LoadingController,
+    public toastController: ToastController,
+    public modalController: ModalController
   ) {
   }
 
@@ -49,12 +50,10 @@ export class PublicService {
   async loading() {
     await this.killLoading();
     const loading = await this.loadingController.create({
-       cssClass: "loading",
+      cssClass: "loading",
       spinner: null,
       message: `
-      <div class='spinner'>
-      </div>
-      <div class='color-white' > جارى التحميل </div>`
+      <div class='spinner'> <div class='color-white' > Loading </div></div>`
 
     });
     return await loading.present();
@@ -74,24 +73,24 @@ export class PublicService {
     const alert = await this.alertController.create({
       header: header,
       message: errorMessage,
-       buttons: [
+      buttons: [
         {
           text: "موافق",
           role: 'cancle',
-           handler: () => {}
+          handler: () => { }
         }
       ]
     });
     await alert.present();
   }
 
- async showSussessToast(message:string){
+  async showSussessToast(message: string) {
     let toast = await this.toastController.create({
-      header:"عمليه ناجحه",
-      message:message,
-       duration:3000
+      header: "عمليه ناجحه",
+      message: message,
+      duration: 3000
     });
-   toast.present();
+    toast.present();
   }
 
   async getDefultPayment() {
@@ -111,14 +110,14 @@ export class PublicService {
   }
   async loginAngular(user) {
     let fullPath = `${environment.apiURL}api/users/auth`;
-    return this.http.post(fullPath, { userName: user.UserName, password: user.Password}).pipe(
+    return this.http.post(fullPath, { userName: user.UserName, password: user.Password }).pipe(
       catchError(this.handleError));
   }
 
 
 
 
-  async CheckPermission(_code:number) {
+  async CheckPermission(_code: number) {
     var permissions = (await this.getUser()).permissions;
     var per = await permissions.includes(_code);
     return per;
@@ -143,7 +142,7 @@ export class PublicService {
         `Backend returned code ${error.status}, ` +
         `body was: ${error}`);
     }
-     return throwError(error);
+    return throwError(error);
   }
 
   async logout() {
@@ -151,4 +150,5 @@ export class PublicService {
     await Storage.remove({ key: 'settings' });
     this.router.navigate(['/']);
   }
+
 }

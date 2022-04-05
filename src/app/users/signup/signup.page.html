@@ -9,24 +9,24 @@
           <ion-item>
             <ion-icon slot="start" color="primary"  name="person"></ion-icon>
             <ion-label color="primary" position="">
-              <span>اسم المستخدم</span>
+              <span>Username</span>
             </ion-label>
             <ion-input clearInput name="UserName" [(ngModel)]="userData.userName" type="text"></ion-input>
           </ion-item>
            <ion-item>
             <ion-icon slot="start" color="primary" name="lock-closed"></ion-icon>
             <ion-label color="primary" position="">
-              <span>كلمه المرور</span>
+              <span>Password</span>
             </ion-label>
             <ion-input clearInput type="password" name="password" [(ngModel)]="userData.password"></ion-input>
           </ion-item>
          <ion-row>
           <ion-col>
-            <ion-button type="submit" expand="block">التسجيل </ion-button>
+            <ion-button type="submit" expand="block">Register </ion-button>
           </ion-col>
         </ion-row>
         <div class="ion-padding">
-          <ion-nav-link [routerLink]="['/signin']">تسجيل الدخول</ion-nav-link>  
+          <ion-nav-link [routerLink]="['/signin']">Login</ion-nav-link>  
        </div>
       </ion-list>
     </form>

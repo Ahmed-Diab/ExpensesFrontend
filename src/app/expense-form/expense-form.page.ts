@@ -1,21 +1,20 @@
-import { DatePipe, formatDate } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { Directory, Filesystem } from '@capacitor/filesystem';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { GestureController, ModalController, NavParams } from '@ionic/angular';
-import { RecordingData, VoiceRecorder } from 'capacitor-voice-recorder';
+import { Subscription } from 'rxjs';
+import { DatePipe } from '@angular/common';
 import { PhotoService } from '../general/photo.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 import { PublicService } from '../general/public.service';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+import { RecordingData, VoiceRecorder } from 'capacitor-voice-recorder';
+import { GestureController, ModalController, NavParams } from '@ionic/angular';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-expense-form',
   templateUrl: './expense-form.page.html',
   styleUrls: ['./expense-form.page.scss'],
 })
-export class ExpenseFormPage implements OnInit, AfterViewInit {
+export class ExpenseFormPage implements AfterViewInit {
   duration = 0;
   rec: string = '';
   categories: any[];
@@ -23,6 +22,7 @@ export class ExpenseFormPage implements OnInit, AfterViewInit {
   storedFileNames: any[] = [];
   durationDisplay: string = "";
   expenseImageURL: string = "";
+  subscriptions: Subscription = new Subscription();
   expense: any = {
     id: 0,
     amount: 0,
@@ -33,12 +33,12 @@ export class ExpenseFormPage implements OnInit, AfterViewInit {
     voiceNoteFormat: "",
     imageNoteFormat: "",
     createdAt: new Date()
-   };
+  };
   @ViewChild("recordbtn", { read: ElementRef }) recordbtn: ElementRef;
   //image: any = { base64String: "", format: "" };
   constructor(
     private gestureController: GestureController,
-    private publicService: PublicService,
+    public publicService: PublicService,
     private photoService: PhotoService,
     public sanitizer: DomSanitizer,
     private modalController: ModalController,
@@ -47,26 +47,14 @@ export class ExpenseFormPage implements OnInit, AfterViewInit {
   ) {
 
   }
-
-  ngAfterViewInit(): void {
-  //   const longpress = this.gestureController.create({
-  //     el: this.recordbtn.nativeElement,
-  //     threshold: 0,
-  //     gestureName: 'long-press',
-  //     onStart: ev => {
-  //       Haptics.impact({ style: ImpactStyle.Light })
-  //       this.startRecording();
-  //       this.calculateDuration();
-  //     },
-  //     onEnd: ev => {
-  //       Haptics.impact({ style: ImpactStyle.Light });
-  //       this.stopRecording();
-  //     }
-  //   }, true)
-  //   longpress.enable();
+ 
+  ionViewDidLeave() {
+     this.subscriptions.unsubscribe();
   }
 
-  ngOnInit() {
+
+  ionViewDidEnter() {
+    this.subscriptions = new Subscription();
     this.loadFiles();
     VoiceRecorder.requestAudioRecordingPermission();
     let categories = this.navParam.get("categories");
@@ -75,12 +63,31 @@ export class ExpenseFormPage implements OnInit, AfterViewInit {
       this.categories = categories;
     }
 
-    if (expense.id > 0) {
+    if (expense) {
       this.expense = expense;
       this.expense.categoryId = expense.categoryId
     } else {
-      this.expense.categoryId = this.categories[0].id;
+      this.expense.categoryId = this.categories[0]?.id;
     }
+  }
+
+
+  ngAfterViewInit(): void {
+    //   const longpress = this.gestureController.create({
+    //     el: this.recordbtn.nativeElement,
+    //     threshold: 0,
+    //     gestureName: 'long-press',
+    //     onStart: ev => {
+    //       Haptics.impact({ style: ImpactStyle.Light })
+    //       this.startRecording();
+    //       this.calculateDuration();
+    //     },
+    //     onEnd: ev => {
+    //       Haptics.impact({ style: ImpactStyle.Light });
+    //       this.stopRecording();
+    //     }
+    //   }, true)
+    //   longpress.enable();
   }
 
   async loadFiles() {
@@ -92,7 +99,7 @@ export class ExpenseFormPage implements OnInit, AfterViewInit {
     })
   }
 
-  removeImage(){
+  removeImage() {
     this.expense.imageNote = "";
     this.expense.imageNoteFormat = "";
   }
@@ -193,6 +200,8 @@ export class ExpenseFormPage implements OnInit, AfterViewInit {
   }
 
   async addNewExpense() {
+    await this.publicService.loading()
+
     let data = {
       categoryId: this.expense.categoryId,
       amount: this.expense.amount,
@@ -201,18 +210,20 @@ export class ExpenseFormPage implements OnInit, AfterViewInit {
       textNote: this.expense.textNote,
       imageNoteFormat: this.expense.imageNoteFormat,
       voiceNoteFormat: "",
-      createdAt:this.datepipe.transform(new Date(), "dd-MM-yyyy HH:mm:ss")
-     }
-    this.publicService.postMethod(`Expenses`, data).subscribe((response: any) => {
+      createdAt: new Date()
+    }
+    this.subscriptions.add(this.publicService.postMethod(`Expenses`, data).subscribe(async (response: any) => {
+      await this.publicService.killLoading();
       if (response.success) {
         this.modalController.dismiss(response.data);
         this.publicService.showSussessToast(response.message)
       } else {
-        this.publicService.showErrorAlert("حدث خطاء", response.message)
+        this.publicService.showErrorAlert("Error", response.message)
       }
-    }, (error: HttpErrorResponse) => {
-      this.publicService.showErrorAlert("حدث خطاء", error.message)
-    })
+    }, async (error: HttpErrorResponse) => {
+      await this.publicService.killLoading();
+      this.publicService.showErrorAlert("Error", error.message)
+    }))
   }
 
   async updateExpense() {
@@ -225,16 +236,20 @@ export class ExpenseFormPage implements OnInit, AfterViewInit {
       imageNoteFormat: this.expense.imageNoteFormat,
       voiceNoteFormat: ""
     }
-    this.publicService.updateMethod(`Expenses/${this.expense.id}`, data).subscribe((response: any) => {
+    await this.publicService.loading();
+
+    this.subscriptions.add(this.publicService.updateMethod(`Expenses/${this.expense.id}`, data).subscribe(async (response: any) => {
       if (response.success) {
         this.modalController.dismiss(response.data);
         this.publicService.showSussessToast(response.message)
       } else {
-        this.publicService.showErrorAlert("حدث خطاء", response.message)
+        this.publicService.showErrorAlert("Error", response.message)
       }
-    }, (error: HttpErrorResponse) => {
-      this.publicService.showErrorAlert("حدث خطاء", error.message)
-    })
+      await this.publicService.killLoading();
+    }, async (error: HttpErrorResponse) => {
+      await this.publicService.killLoading();
+      this.publicService.showErrorAlert("Error", error.message)
+    }))
   }
 
 

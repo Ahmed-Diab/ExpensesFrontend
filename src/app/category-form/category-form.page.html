@@ -1,7 +1,12 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>أضافه / تعديل فئه مصروف</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Add Update Category</ion-title>
+    <ion-buttons slot="end" (click)="this.publicService.killModuleControlar()">
+      <ion-icon name="chevron-forward" ></ion-icon>
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
+  
 </ion-header>
 
 <ion-content>
@@ -10,13 +15,13 @@
       <ion-list>
         <ion-item>
           <ion-label color="primary" position="">
-            <span>اسم الفئه</span>
+            <span> Category Name</span>
           </ion-label>
           <ion-input [(ngModel)]="name" clearInput name="name" type="text"></ion-input>
         </ion-item>
         <ion-row>
           <ion-col>
-            <ion-button type="submit" expand="block">حفظ</ion-button>
+            <ion-button type="submit" expand="block">Save</ion-button>
           </ion-col>
         </ion-row>
       </ion-list>

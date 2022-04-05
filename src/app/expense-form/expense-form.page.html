@@ -1,16 +1,20 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>اضافه مصروف</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Add New Expenses</ion-title>
+    <ion-buttons slot="end" (click)="this.publicService.killModuleControlar()">
+      <ion-icon name="chevron-forward"></ion-icon>
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content >
+<ion-content>
   <div class="container ion-padding" style="padding-bottom: 50px;">
     <form (submit)="SaveExpense()">
       <ion-list>
         <ion-item>
-          <ion-label>فئه المصروف</ion-label>
-          <ion-select okText="أختيار" cancelText="ألغاء" (ngModelChange)="changeCategory($event)"
+          <ion-label> Exp Category : </ion-label>
+          <ion-select okText="Select" cancelText="Cancel" (ngModelChange)="changeCategory($event)"
             [(ngModel)]="expense.categoryId" name="category">
             <ion-select-option *ngFor="let cat of categories" [value]="cat.id">{{cat.name}}</ion-select-option>
           </ion-select>
@@ -18,13 +22,13 @@
 
         <ion-item>
           <ion-label color="primary" position="">
-            <span>المبلغ :</span>
+            <span>Amount :</span>
           </ion-label>
           <ion-input clearInput [(ngModel)]="expense.amount" name="amount" type="number"></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label>ملاحظات :</ion-label>
+          <ion-label>Note :</ion-label>
           <ion-textarea [(ngModel)]="expense.textNote" name="textNote"></ion-textarea>
         </ion-item>
         <ion-item button *ngFor="let f of storedFileNames">
@@ -37,18 +41,27 @@
           </ion-button>
         </ion-item>
       </ion-list>
-      <div class="ion-padding">
-        <ion-button style="position: absolute; left:20px;" *ngIf="expense.imageNoteFormat" slot="end" (click)="removeImage()" fill="clear" color="danger">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <img *ngIf="expense.imageNote" style="max-height: 200px;"
-      [src]="sanitizer.bypassSecurityTrustResourceUrl('data:image/' + expense.imageNoteFormat + ';' + 'base64, ' + expense.imageNote)"
-      alt="" srcset="">
-      </div>
-      
+      <ion-row *ngIf="expense.imageNote">
+        <ion-col size="3" class="col-icon">
+           <div>
+               <ion-icon style="" name="trash-outline" slot="icon-only" color="danger" (click)="removeImage()"></ion-icon>
+           </div>
+        </ion-col>
+
+        <ion-col size="9" class="col-image" style="text-align: right;">
+          <img style="max-height: 50px;"
+            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:image/' + expense.imageNoteFormat + ';' + 'base64, ' + expense.imageNote)"
+            alt="" srcset="">
+        </ion-col>
+
+
+      </ion-row>
+
+
+
 
       <ion-col>
-        <ion-button type="submit" expand="block">حفظ</ion-button>
+        <ion-button type="submit" expand="block">Save</ion-button>
       </ion-col>
     </form>
 

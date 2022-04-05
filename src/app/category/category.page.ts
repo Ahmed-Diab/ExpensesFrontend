@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { CategoryFormPage } from '../category-form/category-form.page';
 import { PublicService } from '../general/public.service';
 
@@ -9,30 +10,39 @@ import { PublicService } from '../general/public.service';
   templateUrl: './category.page.html',
   styleUrls: ['./category.page.scss'],
 })
-export class CategoryPage implements OnInit {
+export class CategoryPage {
   categories: any[] = [];
+  subscriptions: Subscription = new Subscription();
   constructor(
     private publicService: PublicService,
     private moduleControler: ModalController,
     private alertMessage: AlertController
   ) { }
 
-  ngOnInit() {
-    this.getAllCategories();
+  ionViewDidLeave() {
+    this.subscriptions.unsubscribe();
+  }
+  async ionViewDidEnter() {
+    this.subscriptions = new Subscription();
+    await this.getAllCategories();
   }
 
-
-  getAllCategories() {
-    this.publicService.getMethod('Categories').subscribe((response: any) => {
+  async getAllCategories() {
+    await this.publicService.loading();
+    await this.subscriptions.add(this.publicService.getMethod('Categories').subscribe(async (response: any) => {
       if (response.success) {
         this.categories = [];
-        this.categories.push(...response.data);
+        if (response.data.length > 0) {
+          this.categories.push(...response.data);
+        }
       } else {
-        this.publicService.showErrorAlert("حدث خطاء", response.message)
+        this.publicService.showErrorAlert("Error", response.message)
       }
-    }, (error: HttpErrorResponse) => {
-      this.publicService.showErrorAlert("حدث خطاء", error.message)
-    })
+      await this.publicService.killLoading();
+    }, async (error: HttpErrorResponse) => {
+      await this.publicService.killLoading();
+      this.publicService.showErrorAlert("Error", error.message)
+    }))
   }
 
   async addNewCategory(itemState: string) {
@@ -47,48 +57,49 @@ export class CategoryPage implements OnInit {
     (await addCategory).present();
   }
   async updateCategory(category: any) {
-     let addCategory = this.moduleControler.create({
+    let addCategory = this.moduleControler.create({
       component: CategoryFormPage,
       cssClass: 'overlay-width',
       componentProps: { category: category }
     });
     (await addCategory).onDidDismiss().then(async (data) => {
-      if (data.data)  this.ngOnInit();
+      if (data.data) this.getAllCategories();
     });
     (await addCategory).present();
   }
-
-
-async  confirmDeleteMessage(category: any) {
-   var alert = await this.alertMessage.create({
-      header: "تأكيد",
-      message: "هل انت متاكد من انك تريد اتمام عمليه الحذف",
+  async confirmDeleteMessage(category: any) {
+    var alert = await this.alertMessage.create({
+      header: "Confirm",
+      message: "Are You Sure You Want Confirm Delete",
       buttons: [
         {
-          text: "موافق",
+          text: "Ok",
           handler: () => {
             this.deleteCategory(category);
           }
         },
         {
-          text:"ألغاء",
-          role:"Cancle",
-          handler:()=>{}
+          text: "Cancle",
+          role: "Cancle",
+          handler: () => { }
         }
       ]
     });
     alert.present();
   }
-  deleteCategory(category: any) {
-    this.publicService.deleteMethod(`Categories/${category.id}`).subscribe(async (response: any) => {
-       if (response.success) {
+  async deleteCategory(category: any) {
+    await this.publicService.loading();
+    this.subscriptions.add(this.publicService.deleteMethod(`Categories/${category.id}`).subscribe(async (response: any) => {
+      if (response.success) {
         this.categories = await this.categories.filter(c => c.id !== category.id);
         this.publicService.showSussessToast(response.message);
       } else {
-        this.publicService.showErrorAlert("حدث خطاء", response.message)
+        this.publicService.showErrorAlert("Error", response.message)
       }
-    }, (error: HttpErrorResponse) => {
-      this.publicService.showErrorAlert("حدث خطاء", error.message)
-    })
+      await this.publicService.killLoading();
+    }, async (error: HttpErrorResponse) => {
+      this.publicService.showErrorAlert("Error", error.message);
+      await this.publicService.killLoading();
+    }))
   }
 }
