@@ -40,12 +40,12 @@ export class HomePage implements OnInit {
       if (response.success) {
         this.single = response.data;
       } else {
-        this.publicService.showErrorAlert("حدث خطاء", response.message)
+        this.publicService.showErrorAlert("Error", response.message)
       }
       await this.publicService.killLoading();
     }, async (error: HttpErrorResponse) => {
       await this.publicService.killLoading();
-      this.publicService.showErrorAlert("حدث خطاء", error.message)
+      this.publicService.showErrorAlert("Error", error.message)
     })
   }
   resizeChart(width: any): void {

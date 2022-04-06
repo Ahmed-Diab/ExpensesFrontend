@@ -1,37 +1,40 @@
-<ion-content>
+<ion-content color="primary" class="ion-padding">
+  <form color="primary" [formGroup]="loginForm" (ngSubmit)="submitLoginForm()" autocomplete="off" novalidate>
+    <h3 color="primary" [hidden]="isSignup">Signin</h3>
+    <h3 color="primary" [hidden]="!isSignup">Signup</h3>
 
-  <div class="container">
-    <form [formGroup]="loginForm" (ngSubmit)="submitLoginForm()" novalidate>
-      <ion-list>
-        <div class="img-continer">
-          <img src="assets/icon/expenses.jpg" alt="icon-img">
-        </div>            
-          <ion-item>
-            <ion-icon slot="start" color="primary"  name="person"></ion-icon>
-            <ion-label color="primary" position="">
-              <span>Username</span>
-            </ion-label>
-            <ion-input clearInput formControlName="UserName" type="text"></ion-input>
-          </ion-item>
-           <ion-item>
-            <ion-icon slot="start" color="primary" name="lock-closed"></ion-icon>
-            <ion-label color="primary" position="">
-              <span>Password</span>
-            </ion-label>
-            <ion-input clearInput type="password" formControlName="Password"></ion-input>
-          </ion-item>
-         <ion-row>
-          <ion-col>
-            <ion-button type="submit" expand="block">Sign In</ion-button>
-          </ion-col>
-         </ion-row>
-         <div class="ion-padding">
-             <ion-nav-link [routerLink]="['/signup']">Create New Account</ion-nav-link>  
-          </div>
-      </ion-list>
-    </form>
-  </div>
+    <ion-list color="primary" class="ion-no-padding">
+      <ion-item color="primary">
+        <ion-icon slot="start" color="light" name="person"></ion-icon>
+        <ion-label position="floating" color="light">Username</ion-label>
+        <ion-input formControlName="UserName" color="light" type="text"></ion-input>
+      </ion-item>
+
+      <ion-item color="primary">
+        <ion-icon slot="start" color="light" name="lock-closed"></ion-icon>
+        <ion-label position="floating" color="light">Password</ion-label>
+        <ion-input formControlName="Password" color="light" type="password"></ion-input>
+      </ion-item>
+
+      <ion-item [hidden]="!isSignup" color="primary">
+        <ion-icon slot="start" color="light" name="lock-closed"></ion-icon>
+        <ion-label position="floating" color="light">Confirm Password</ion-label>
+        <ion-input formControlName="ConfirmPassword" color="light" type="password"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-button color="dark" [hidden]="isSignup" type="submit" class="ion-margin-top ion-margin-buttom" expand="block"
+      shape="round">Sign
+      In</ion-button>
+
+    <ion-button color="dark" type="submit" [hidden]="!isSignup" class="ion-margin-top ion-margin-buttom" expand="block"
+      shape="round"> Signup </ion-button>
+
+    <ion-button class="ion-margin-top" [hidden]="isSignup" (click)="changePageState()" color="light" expand="block"
+      shape="round">Create Account
+    </ion-button>
+    <ion-button class="ion-margin-top" [hidden]="!isSignup" (click)="changePageState()" color="light" expand="block"
+      shape="round">Signin
+    </ion-button>
+
+  </form>
 </ion-content>
-
-
-

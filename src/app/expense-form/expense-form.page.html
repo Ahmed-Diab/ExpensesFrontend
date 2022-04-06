@@ -53,13 +53,7 @@
             [src]="sanitizer.bypassSecurityTrustResourceUrl('data:image/' + expense.imageNoteFormat + ';' + 'base64, ' + expense.imageNote)"
             alt="" srcset="">
         </ion-col>
-
-
       </ion-row>
-
-
-
-
       <ion-col>
         <ion-button type="submit" expand="block">Save</ion-button>
       </ion-col>
@@ -78,7 +72,7 @@
     <ion-row class="ion-align-items-center">
       <ion-col size="10">
         <span engIf="! recording">
-          أضغط وانتظر كى يتم التسجيل
+Press And Hold
         </span>
         <span engIf="recording">
           {{ durationDisplay }}

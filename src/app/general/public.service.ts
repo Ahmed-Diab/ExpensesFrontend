@@ -75,7 +75,7 @@ export class PublicService {
       message: errorMessage,
       buttons: [
         {
-          text: "موافق",
+          text: "Ok",
           role: 'cancle',
           handler: () => { }
         }
@@ -86,7 +86,7 @@ export class PublicService {
 
   async showSussessToast(message: string) {
     let toast = await this.toastController.create({
-      header: "عمليه ناجحه",
+      header: "Success Message",
       message: message,
       duration: 3000
     });
