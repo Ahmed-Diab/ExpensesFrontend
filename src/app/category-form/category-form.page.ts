@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 import { Storage } from "@capacitor/storage";
-import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PublicService } from '../general/public.service';
 import { ModalController, NavParams } from '@ionic/angular';
@@ -11,16 +11,22 @@ import { ModalController, NavParams } from '@ionic/angular';
   styleUrls: ['./category-form.page.scss'],
 })
 export class CategoryFormPage {
+  
+  //#region Declration
   name: string = '';
   category: any = null;
   subscriptions: Subscription = new Subscription();
+  //#endregion
 
+  //#region Constrator
   constructor(
     private navParams: NavParams,
     public publicService: PublicService,
     private modalController: ModalController
   ) { }
+  //#endregion 
 
+  //#region Ionic Life Cycle
   ionViewDidLeave() {
     this.subscriptions.unsubscribe();
   }
@@ -30,7 +36,10 @@ export class CategoryFormPage {
     if (this.category) {
       this.name = this.category.name;
     }
-  } 
+  }
+  //#endregion
+
+  //#region Methods
   async submitCategory() {
     this.category != null ? this.updateCategory() : this.addNewCategory();
   }
@@ -68,4 +77,7 @@ export class CategoryFormPage {
       this.publicService.showErrorAlert("Error", error.message)
     }))
   }
+
+  //#endregion
+
 }

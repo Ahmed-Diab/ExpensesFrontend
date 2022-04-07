@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
 import { ExpenseFormPage } from './expense-form.page';
+import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {

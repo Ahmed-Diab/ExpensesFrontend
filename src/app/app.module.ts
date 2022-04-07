@@ -7,10 +7,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { PublicService } from './general/public.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { ImageViewComponent } from './image-view/image-view.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ImageViewComponent } from './image-view/image-view.component';
-
 @NgModule({
   declarations: [AppComponent, ImageViewComponent],
   entryComponents: [],

@@ -4,18 +4,14 @@ import { Injectable } from '@angular/core';
 import { Storage } from "@capacitor/storage";
 import { formatDate } from '@angular/common';
 import { catchError, map } from 'rxjs/operators';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
-
-const TOKEN_Key = "token";
-const helper = JwtHelperService;
 @Injectable({
   providedIn: 'root'
 })
 export class PublicService {
-
+  //#region Constractor
   constructor(
     public router: Router,
     public http: HttpClient,
@@ -25,7 +21,9 @@ export class PublicService {
     public modalController: ModalController
   ) {
   }
+  //#endregion
 
+  //#region Methods
   getFullDate(date) {
     return formatDate(date, 'yyyy-MM-dd hh:mm:ss', 'en-US');
   }
@@ -53,7 +51,9 @@ export class PublicService {
       cssClass: "loading",
       spinner: null,
       message: `
-      <div class='spinner'> <div class='color-white' > Loading </div></div>`
+      <div class='spinner'> 
+        <div class='color-white' > Loading </div>
+      </div>`
 
     });
     return await loading.present();
@@ -65,6 +65,7 @@ export class PublicService {
       await this.loadingController.dismiss();
     }
   }
+
   async killModuleControlar() {
     await this.modalController.dismiss();
   }
@@ -150,5 +151,6 @@ export class PublicService {
     await Storage.remove({ key: 'settings' });
     this.router.navigate(['/']);
   }
+  //#endregion
 
 }

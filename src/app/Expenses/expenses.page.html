@@ -6,7 +6,6 @@
 
 
 <ion-content [fullscreen]="true" class="ion-padding" color="primary">
-
   <ion-grid fixed>
     <ion-row *ngFor="let expense of expenses">
       <ion-col size="12">
@@ -44,30 +43,6 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <!-- <ion-card *ngFor="let expense of expenses">
-
-
-
-    <img *ngIf="expense.imageNote"
-      [src]="sanitizer.bypassSecurityTrustResourceUrl('data:image/' + expense.imageNoteFormat + ';' + 'base64, ' + expense.imageNote)"
-      alt="" srcset="" style="max-width: 65%;">
-     <ion-card-header>
-      <ion-card-title></ion-card-title>
-      <ion-card-title> Amount : {{expense.amount}}</ion-card-title>
-      <ion-card-title> Note : {{expense.textNote}}</ion-card-title>
-      <ion-card-title> Date :{{expense.createdAt | date :'dd-MM-yyyy'}} </ion-card-title>
-      <ion-card-title>
-        <ion-item>
-          <ion-button slot="end" (click)="confirmDeleteMessage(expense)" fill="clear" color="danger">
-            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-          </ion-button>
-          <ion-button slot="end" (click)="updateExpense(expense)" fill="clear" color="dark">
-            <ion-icon name="create" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-item>
-      </ion-card-title>
-    </ion-card-header>
-  </ion-card> -->
 </ion-content>
 
 <ion-fab vertical="bottom" (click)="addNewExpense()" horizontal="end" slot="fixed">

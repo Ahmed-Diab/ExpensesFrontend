@@ -1,43 +1,55 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Color } from '@swimlane/ngx-charts';
 import { Subscription } from 'rxjs';
+import { Color } from '@swimlane/ngx-charts';
+import { HttpErrorResponse } from '@angular/common/http';
 import { PublicService } from '../general/public.service';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage {
+
+  //#region Declration
   @ViewChild("containerRef") containerRef: ElementRef
   single: any[] = [];
   view: [number, number] = [400, 320];
-  // options
   gradient: boolean = true;
   showLegend: boolean = true;
   showLabels: boolean = false;
   isDoughnut: boolean = false;
   legendPosition: any = 'below';
-  dashboardSubscription: Subscription
+  dashboardSubscription: Subscription;
   colorScheme: Color = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
     name: 'colorScheme',
     selectable: false,
     group: null
   };
+  //#endregion
 
+  //#region Constractor
   constructor(
     private publicService: PublicService
   ) {
   }
-  ngOnInit(): void {
+  //#endregion
 
+  //#region Ionic Life Cycle
+
+  async ionViewDidEnter() {
+    await  this.resizeChart(this.containerRef.nativeElement.offsetWidth)
+    await  this.getDashbordData();
   }
-  ionViewDidEnter() {
-    this.resizeChart(this.containerRef.nativeElement.offsetWidth)
-    this.getDashbordData();
+
+  ionViewDidLeave() {
+    this.dashboardSubscription.unsubscribe();
   }
+
+  //#endregion
+
+  //#region Methods
   async getDashbordData() {
     await this.publicService.loading();
     this.dashboardSubscription = this.publicService.getMethod('Users/GetDashboard').subscribe(async (response: any) => {
@@ -52,9 +64,11 @@ export class HomePage implements OnInit {
       this.publicService.showErrorAlert("Error", error.message)
     })
   }
+
   resizeChart(width: any): void {
     this.view = [width, 320]
   }
+
   // onSelect(data): void {
   //   console.log('Item clicked', JSON.parse(JSON.stringify(data)));
   // }
@@ -66,5 +80,6 @@ export class HomePage implements OnInit {
   // onDeactivate(data): void {
   //   console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   // }
+  //#endregion
 
 }

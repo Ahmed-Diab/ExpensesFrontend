@@ -1,12 +1,11 @@
 <ion-header>
   <ion-toolbar color="dark">
-    <ion-title>Add Update Category</ion-title>
+    <ion-title>Add / Update Category</ion-title>
     <ion-buttons slot="end" (click)="this.publicService.killModuleControlar()">
       <ion-icon name="chevron-forward"></ion-icon>
       <ion-back-button></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
 
 <ion-content class="ion-padding" color="primary">
@@ -17,6 +16,5 @@
           <ion-input [(ngModel)]="name" name="categoryName" color="light" type="text" clearInput></ion-input>
         </ion-item>
        <ion-button class="ion-margin-top ion-margin-bottom" type="submit" expand="block" color="dark">Save</ion-button>
-
     </form>
  </ion-content>

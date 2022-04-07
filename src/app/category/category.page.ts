@@ -1,9 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { CategoryFormPage } from '../category-form/category-form.page';
+import { Component } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { PublicService } from '../general/public.service';
+import { AlertController, ModalController } from '@ionic/angular';
+import { CategoryFormPage } from '../category-form/category-form.page';
 
 @Component({
   selector: 'app-category',
@@ -11,22 +11,32 @@ import { PublicService } from '../general/public.service';
   styleUrls: ['./category.page.scss'],
 })
 export class CategoryPage {
+
+  //#region Declration
   categories: any[] = [];
   subscriptions: Subscription = new Subscription();
+  //#endregion
+
+  //#region Constrator
   constructor(
     private publicService: PublicService,
     private moduleControler: ModalController,
     private alertMessage: AlertController
   ) { }
-
+  //#endregion
+ 
+  //#region  ionic life cycle
   ionViewDidLeave() {
     this.subscriptions.unsubscribe();
   }
+
   async ionViewDidEnter() {
     this.subscriptions = new Subscription();
     await this.getAllCategories();
   }
-
+  //#endregion
+  
+  //#region Methods
   async getAllCategories() {
     await this.publicService.loading();
     await this.subscriptions.add(this.publicService.getMethod('Categories').subscribe(async (response: any) => {
@@ -48,7 +58,6 @@ export class CategoryPage {
   async addNewCategory(itemState: string) {
     let addCategory = this.moduleControler.create({
       component: CategoryFormPage,
-      cssClass: 'overlay-width',
       componentProps: { itemState: itemState }
     });
     (await addCategory).onDidDismiss().then(async (data) => {
@@ -59,7 +68,6 @@ export class CategoryPage {
   async updateCategory(category: any) {
     let addCategory = this.moduleControler.create({
       component: CategoryFormPage,
-      cssClass: 'overlay-width',
       componentProps: { category: category }
     });
     (await addCategory).onDidDismiss().then(async (data) => {
@@ -102,4 +110,6 @@ export class CategoryPage {
       await this.publicService.killLoading();
     }))
   }
+  //#endregion 
+
 }

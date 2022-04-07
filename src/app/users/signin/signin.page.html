@@ -1,25 +1,25 @@
 <ion-content class="ion-padding" color="primary">
-  <form [formGroup]="loginForm" (ngSubmit)="submitLoginForm()" autocomplete="off" novalidate>
-    <h3 [hidden]="isSignup">Signin</h3>
-    <h3 [hidden]="!isSignup">Signup</h3>
+  <form (ngSubmit)="submitLoginForm()" autocomplete="off" novalidate>
+    <h3 [hidden]="isSignup">Sign In</h3>
+    <h3 [hidden]="!isSignup">Sign Up</h3>
 
     <ion-list class="ion-no-padding">
       <ion-item color="primary">
         <ion-icon slot="start" name="person"></ion-icon>
         <ion-label position="floating">Username</ion-label>
-        <ion-input formControlName="UserName" type="text"></ion-input>
+        <ion-input [(ngModel)]="user.UserName" name="username" type="text"></ion-input>
       </ion-item>
 
       <ion-item color="primary">
         <ion-icon slot="start" name="lock-closed"></ion-icon>
         <ion-label position="floating">Password</ion-label>
-        <ion-input formControlName="Password" type="password"></ion-input>
+        <ion-input [(ngModel)]="user.Password" name="password" type="password"></ion-input>
       </ion-item>
 
       <ion-item [hidden]="!isSignup" color="primary">
         <ion-icon slot="start"  name="lock-closed"></ion-icon>
         <ion-label position="floating">Confirm Password</ion-label>
-        <ion-input formControlName="ConfirmPassword" type="password"></ion-input>
+        <ion-input  [(ngModel)]="user.ConfirmPassword" name="confirmPassword" type="password"></ion-input>
       </ion-item>
     </ion-list>
  

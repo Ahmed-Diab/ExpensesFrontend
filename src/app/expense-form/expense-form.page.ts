@@ -15,6 +15,8 @@ import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
   styleUrls: ['./expense-form.page.scss'],
 })
 export class ExpenseFormPage implements AfterViewInit {
+
+  //#region Declrations
   duration = 0;
   rec: string = '';
   categories: any[];
@@ -35,7 +37,9 @@ export class ExpenseFormPage implements AfterViewInit {
     createdAt: new Date()
   };
   @ViewChild("recordbtn", { read: ElementRef }) recordbtn: ElementRef;
-  //image: any = { base64String: "", format: "" };
+  //#endregion
+
+  //#region Constrator
   constructor(
     private gestureController: GestureController,
     public publicService: PublicService,
@@ -47,22 +51,22 @@ export class ExpenseFormPage implements AfterViewInit {
   ) {
 
   }
- 
-  ionViewDidLeave() {
-     this.subscriptions.unsubscribe();
-  }
+  //#endregion 
 
+  //#region ionic life cycle
+  ionViewDidLeave() {
+    this.subscriptions.unsubscribe();
+  }
 
   ionViewDidEnter() {
     this.subscriptions = new Subscription();
-    this.loadFiles();
-    VoiceRecorder.requestAudioRecordingPermission();
+    //this.loadFiles();
+    //VoiceRecorder.requestAudioRecordingPermission();
     let categories = this.navParam.get("categories");
     let expense = this.navParam.get("expense")
     if (categories) {
       this.categories = categories;
     }
-
     if (expense) {
       this.expense = expense;
       this.expense.categoryId = expense.categoryId
@@ -70,8 +74,9 @@ export class ExpenseFormPage implements AfterViewInit {
       this.expense.categoryId = this.categories[0]?.id;
     }
   }
+  //#endregion
 
-
+  //#region angular life cycle
   ngAfterViewInit(): void {
     //   const longpress = this.gestureController.create({
     //     el: this.recordbtn.nativeElement,
@@ -89,16 +94,9 @@ export class ExpenseFormPage implements AfterViewInit {
     //   }, true)
     //   longpress.enable();
   }
+  //#endregion
 
-  async loadFiles() {
-    Filesystem.readdir({
-      path: "",
-      directory: Directory.Data
-    }).then(result => {
-      this.storedFileNames = result.files;
-    })
-  }
-
+  //#region Methods
   removeImage() {
     this.expense.imageNote = "";
     this.expense.imageNoteFormat = "";
@@ -112,87 +110,12 @@ export class ExpenseFormPage implements AfterViewInit {
     VoiceRecorder.startRecording();
   }
 
-  stopRecording() {
-    if (!this.recording) {
-      return;
-    }
-    VoiceRecorder.stopRecording().then(async (result: RecordingData) => {
-      this.recording = false;
-      if (result.value && result.value.recordDataBase64) {
-        const recordData = result.value.recordDataBase64;
-        const fileName = new Date().getTime() + '.mp3';
-        await Filesystem.writeFile({
-          path: fileName,
-          directory: Directory.Data,
-          data: recordData
-        });
-        this.loadFiles();
-      }
-    });
-  }
 
-
-  async playFile(fileName) {
-    const audioFile = await Filesystem.readFile({
-      path: fileName,
-      directory: Directory.Data
-    });
-    const base64Sound = audioFile.data;
-    const audioRef = new Audio(`data:audio/aac; base64, ${base64Sound}`);
-    audioRef.oncanplaythrough = () => audioRef.play();
-    audioRef.load();
-  }
-
-  //  async stopFile(fileName) {
-  //     const audioFile = await Filesystem.readFile({
-  //       path: fileName,
-  //       directory: Directory.Data
-  //     });
-  //     const base64Sound = audioFile.data;
-  //     const audioRef = new Audio(`data:audio/aac; base64, ${base64Sound}`);
-  //     audioRef.oncanplaythrough = () => audioRef.pause();
-  //     audioRef.load();
-  //    }
-
-  async deleteRecording(fileName) {
-    await Filesystem.deleteFile({
-      directory: Directory.Data,
-      path: fileName
-    });
-    this.storedFileNames = [];
-    this.loadFiles();
-  }
-  calculateDuration() {
-    if (!this.recording) {
-      this.duration = 0;
-      this.durationDisplay = "";
-      return;
-    }
-    this.duration += 1;
-    const minutes = Math.floor(this.duration / 60);
-    const seconds = (this.duration % 60).toString().padStart(2, '0');
-    this.durationDisplay = `${minutes}:${seconds}`
-    setTimeout(() => {
-      this.calculateDuration();
-    }, 1000);
-  }
   addPhotoToGallery() {
     this.photoService.addNewToGallery().then(data => {
-      //this.image = data;
       this.expense.imageNote = data.base64String;
       this.expense.imageNoteFormat = data.format;
     });
-
-    //   Camera.getPhoto({
-    //     quality: 100,
-    //     source: CameraSource.Prompt,
-    //     correctOrientation: true,
-    //     allowEditing: false,
-    //     resultType: CameraResultType.DataUrl
-    // })
-    //  .then(image => {
-    //      console.log(image);
-    //   })
   }
 
   SaveExpense() {
@@ -237,7 +160,6 @@ export class ExpenseFormPage implements AfterViewInit {
       voiceNoteFormat: ""
     }
     await this.publicService.loading();
-
     this.subscriptions.add(this.publicService.updateMethod(`Expenses/${this.expense.id}`, data).subscribe(async (response: any) => {
       if (response.success) {
         this.modalController.dismiss(response.data);
@@ -252,7 +174,6 @@ export class ExpenseFormPage implements AfterViewInit {
     }))
   }
 
-
   onChange(file: any) {
     for (var i = 0; i < file.length; i++) {
       var fi = file[i];
@@ -264,8 +185,81 @@ export class ExpenseFormPage implements AfterViewInit {
     }
   }
 
-
   changeCategory(event: any) {
     this.expense.categoryId = event;
   }
+
+  // async loadFiles() {
+  //   Filesystem.readdir({
+  //     path: "",
+  //     directory: Directory.Data
+  //   }).then(result => {
+  //     this.storedFileNames = result.files;
+  //   })
+  // }
+
+  // stopRecording() {
+  //   if (!this.recording) {
+  //     return;
+  //   }
+  //   VoiceRecorder.stopRecording().then(async (result: RecordingData) => {
+  //     this.recording = false;
+  //     if (result.value && result.value.recordDataBase64) {
+  //       const recordData = result.value.recordDataBase64;
+  //       const fileName = new Date().getTime() + '.mp3';
+  //       await Filesystem.writeFile({
+  //         path: fileName,
+  //         directory: Directory.Data,
+  //         data: recordData
+  //       });
+  //       this.loadFiles();
+  //     }
+  //   });
+  // }
+
+
+  // async playFile(fileName) {
+  //   const audioFile = await Filesystem.readFile({
+  //     path: fileName,
+  //     directory: Directory.Data
+  //   });
+  //   const base64Sound = audioFile.data;
+  //   const audioRef = new Audio(`data:audio/aac; base64, ${base64Sound}`);
+  //   audioRef.oncanplaythrough = () => audioRef.play();
+  //   audioRef.load();
+  // }
+
+  // async deleteRecording(fileName) {
+  //   await Filesystem.deleteFile({
+  //     directory: Directory.Data,
+  //     path: fileName
+  //   });
+  //   this.storedFileNames = [];
+  //   this.loadFiles();
+  // }
+  // calculateDuration() {
+  //   if (!this.recording) {
+  //     this.duration = 0;
+  //     this.durationDisplay = "";
+  //     return;
+  //   }
+  //   this.duration += 1;
+  //   const minutes = Math.floor(this.duration / 60);
+  //   const seconds = (this.duration % 60).toString().padStart(2, '0');
+  //   this.durationDisplay = `${minutes}:${seconds}`
+  //   setTimeout(() => {
+  //     this.calculateDuration();
+  //   }, 1000);
+  // }
+  //  async stopFile(fileName) {
+  //     const audioFile = await Filesystem.readFile({
+  //       path: fileName,
+  //       directory: Directory.Data
+  //     });
+  //     const base64Sound = audioFile.data;
+  //     const audioRef = new Audio(`data:audio/aac; base64, ${base64Sound}`);
+  //     audioRef.oncanplaythrough = () => audioRef.pause();
+  //     audioRef.load();
+  //    }
+  //#endregion
 }

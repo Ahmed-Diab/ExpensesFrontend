@@ -1,11 +1,10 @@
 import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
-import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { PublicService } from '../general/public.service';
+import { AlertController, ModalController } from '@ionic/angular';
 import { ExpenseFormPage } from '../expense-form/expense-form.page';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { ImageViewComponent } from '../image-view/image-view.component';
 
 @Component({
@@ -13,34 +12,34 @@ import { ImageViewComponent } from '../image-view/image-view.component';
   templateUrl: 'expenses.page.html',
   styleUrls: ['expenses.page.scss']
 })
-export class ExpensesPage implements OnInit, OnDestroy {
+export class ExpensesPage {
+  //#region Declrations
   expenses: any[] = [];
   categories: any[] = [];
   subscriptions: Subscription = new Subscription();
+  //#endregion
+
+  //#region Constractor
   constructor(
     public publicService: PublicService,
     public sanitizer: DomSanitizer,
     public alertMessage: AlertController,
     public moduleControler: ModalController,
   ) { }
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
+  //#endregion
 
+  //#region Ionic Life Cycle
   ionViewDidLeave() {
     this.subscriptions.unsubscribe();
   }
-
 
   ionViewDidEnter() {
     this.subscriptions = new Subscription();
     this.getAllExpenses();
   }
+  //#endregion
 
-  ngOnInit(): void {
-
-  }
-
+  //#region Methods
   async displayImage(expense: any) {
     let modal = this.moduleControler.create({
       component: ImageViewComponent,
@@ -86,7 +85,6 @@ export class ExpensesPage implements OnInit, OnDestroy {
   async addNewExpense() {
     let addExpense = this.moduleControler.create({
       component: ExpenseFormPage,
-      cssClass: 'overlay-width',
       componentProps: { categories: this.categories }
     });
     (await addExpense).onDidDismiss().then(async (data) => {
@@ -133,12 +131,13 @@ export class ExpensesPage implements OnInit, OnDestroy {
   async updateExpense(expense: any) {
     let addExpense = this.moduleControler.create({
       component: ExpenseFormPage,
-      cssClass: 'overlay-width',
       componentProps: { expense: expense, categories: this.categories }
     });
     (await addExpense).onDidDismiss().then(async (data) => {
-      if (data.data) this.ngOnInit();
+      if (data.data) this.ionViewDidEnter();
     });
     (await addExpense).present();
   }
+  //#endregion
+
 }

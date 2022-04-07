@@ -1,11 +1,13 @@
+
+import { Router } from '@angular/router';
+import { Storage } from "@capacitor/storage";
+import { AlertController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, Platform } from '@ionic/angular';
-import { Router } from '@angular/router';
-import { PublicService } from 'src/app/general/public.service';
-import { Storage } from "@capacitor/storage";
 import { HttpErrorResponse } from '@angular/common/http';
+import { PublicService } from 'src/app/general/public.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 const helper = new JwtHelperService();
 const TOKEN_Key = "token";
 @Component({
@@ -13,34 +15,35 @@ const TOKEN_Key = "token";
   templateUrl: './signin.page.html',
   styleUrls: ['./signin.page.scss'],
 })
-export class SigninPage implements OnInit {
-  loginForm: FormGroup;
-  isSubmitted = false;
+export class SigninPage {
+
+  //#region Declration
+   isSubmitted = false;
   isSignup: boolean = false;
+  user: any = {
+    UserName: '',
+    Password: '',
+    ConfirmPassword: ''
+  }
+  //#endregion
+
+  //#region Constractor
   constructor(
-    private _formBuilder: FormBuilder,
     public router: Router,
     public publicService: PublicService,
     public messageService: AlertController) {
-    // change lang to ar
   }
+  //#endregion
 
-  ngOnInit() {
-    this.loginForm = this._formBuilder.group({
-      UserName: ['', [Validators.required, Validators.minLength(4)]],
-      Password: ['', [Validators.required, Validators.minLength(6)]],
-      ConfirmPassword:['', [Validators.minLength(6)]]
-    });
-
+  //#region Ionic Life Cycle
+  ionViewDidEnter() {
   }
+  //#endregion
 
-  get errorControl() {
-    return this.loginForm.controls;
-  }
-
-
+  //#region Methods
+ 
   async submitLoginForm() {
-    if (this.isSignup && this.loginForm.value.Password != this.loginForm.value.ConfirmPassword) {
+    if (this.isSignup && this.user.Password != this.user.ConfirmPassword) {
       return this.publicService.showErrorAlert("Error", "Password filed not match with Confirm Password ");
     }
     this.isSignup ? this.signupHttp() : this.signinHttp();
@@ -48,12 +51,12 @@ export class SigninPage implements OnInit {
 
   async signinHttp() {
     await this.publicService.loading();
-    this.publicService.postMethod('users/signin', this.loginForm.value).subscribe(async (res: any) => {
+    this.publicService.postMethod('users/signin', this.user).subscribe(async (res: any) => {
       if (res.success) {
         await Storage.set({ key: "user", value: JSON.stringify(res.data) });
         this.router.navigate(['/tabs']);
       } else {
-        
+
         this.publicService.showErrorAlert("Error", res.message);
       }
       await this.publicService.killLoading();
@@ -67,7 +70,7 @@ export class SigninPage implements OnInit {
 
   async signupHttp() {
     this.publicService.loading().then(async () => {
-      this.publicService.postMethod('users/signup', this.loginForm.value).subscribe(async (res: any) => {
+      this.publicService.postMethod('users/signup', this.user).subscribe(async (res: any) => {
         if (res.success) {
           await this.publicService.killLoading();
           this.router.navigate(['/signin']);
@@ -85,5 +88,7 @@ export class SigninPage implements OnInit {
   changePageState() {
     this.isSignup = !this.isSignup;
   }
+
+  //#endregion
 
 }
