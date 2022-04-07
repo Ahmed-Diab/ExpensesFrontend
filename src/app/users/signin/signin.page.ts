@@ -40,6 +40,9 @@ export class SigninPage implements OnInit {
 
 
   async submitLoginForm() {
+    if (this.isSignup && this.loginForm.value.Password != this.loginForm.value.ConfirmPassword) {
+      return this.publicService.showErrorAlert("Error", "Password filed not match with Confirm Password ");
+    }
     this.isSignup ? this.signupHttp() : this.signinHttp();
   }
 
@@ -50,6 +53,7 @@ export class SigninPage implements OnInit {
         await Storage.set({ key: "user", value: JSON.stringify(res.data) });
         this.router.navigate(['/tabs']);
       } else {
+        
         this.publicService.showErrorAlert("Error", res.message);
       }
       await this.publicService.killLoading();

@@ -6,6 +6,7 @@ import { PublicService } from '../general/public.service';
 import { ExpenseFormPage } from '../expense-form/expense-form.page';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { ImageViewComponent } from '../image-view/image-view.component';
 
 @Component({
   selector: 'app-expenses',
@@ -23,11 +24,11 @@ export class ExpensesPage implements OnInit, OnDestroy {
     public moduleControler: ModalController,
   ) { }
   ngOnDestroy(): void {
-     this.subscriptions.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   ionViewDidLeave() {
-     this.subscriptions.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
 
@@ -40,6 +41,13 @@ export class ExpensesPage implements OnInit, OnDestroy {
 
   }
 
+  async displayImage(expense: any) {
+    let modal = this.moduleControler.create({
+      component: ImageViewComponent,
+      componentProps: { expense: expense }
+    });
+    (await modal).present();
+  }
   async getAllCategories() {
     await this.publicService.loading();
     this.subscriptions.add(this.publicService.getMethod('Categories').subscribe(async (response: any) => {

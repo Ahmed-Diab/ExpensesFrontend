@@ -1,30 +1,22 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="dark">
     <ion-title>Add Update Category</ion-title>
     <ion-buttons slot="end" (click)="this.publicService.killModuleControlar()">
-      <ion-icon name="chevron-forward" ></ion-icon>
+      <ion-icon name="chevron-forward"></ion-icon>
       <ion-back-button></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
-  
+
 </ion-header>
 
-<ion-content>
-  <div class="container">
-    <form (submit)="submitCategory()" novalidate>
-      <ion-list>
-        <ion-item>
-          <ion-label color="primary" position="">
-            <span> Category Name</span>
-          </ion-label>
-          <ion-input [(ngModel)]="name" clearInput name="name" type="text"></ion-input>
+<ion-content class="ion-padding" color="primary">
+     <form (submit)="submitCategory()" novalidate>
+         <ion-item  color="primary" class="ion-margin-top ion-margin-bottom">
+          <ion-icon slot="start" color="light" name="grid"></ion-icon>
+          <ion-label position="floating" color="light">Category Name</ion-label>
+          <ion-input [(ngModel)]="name" name="categoryName" color="light" type="text" clearInput></ion-input>
         </ion-item>
-        <ion-row>
-          <ion-col>
-            <ion-button type="submit" expand="block">Save</ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-list>
+       <ion-button class="ion-margin-top ion-margin-bottom" type="submit" expand="block" color="dark">Save</ion-button>
+
     </form>
-  </div>
-</ion-content>
+ </ion-content>

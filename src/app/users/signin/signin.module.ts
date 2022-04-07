@@ -5,8 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { SigninPageRoutingModule } from './signin-routing.module';
 import { SigninPage } from './signin.page';
 import { PublicService } from 'src/app/general/public.service';
-import { SharedModule } from 'src/app/shared/shared.module';
-
+ 
 @NgModule({
   imports: [
     CommonModule,
@@ -14,8 +13,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     ReactiveFormsModule,
     IonicModule,
     SigninPageRoutingModule,
-    SharedModule
-  ],
+   ],
   providers:[PublicService],
   declarations: [SigninPage]
 })

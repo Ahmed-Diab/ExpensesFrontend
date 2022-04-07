@@ -1,40 +1,38 @@
-<ion-content color="primary" class="ion-padding">
-  <form color="primary" [formGroup]="loginForm" (ngSubmit)="submitLoginForm()" autocomplete="off" novalidate>
-    <h3 color="primary" [hidden]="isSignup">Signin</h3>
-    <h3 color="primary" [hidden]="!isSignup">Signup</h3>
+<ion-content class="ion-padding" color="primary">
+  <form [formGroup]="loginForm" (ngSubmit)="submitLoginForm()" autocomplete="off" novalidate>
+    <h3 [hidden]="isSignup">Signin</h3>
+    <h3 [hidden]="!isSignup">Signup</h3>
 
-    <ion-list color="primary" class="ion-no-padding">
+    <ion-list class="ion-no-padding">
       <ion-item color="primary">
-        <ion-icon slot="start" color="light" name="person"></ion-icon>
-        <ion-label position="floating" color="light">Username</ion-label>
-        <ion-input formControlName="UserName" color="light" type="text"></ion-input>
+        <ion-icon slot="start" name="person"></ion-icon>
+        <ion-label position="floating">Username</ion-label>
+        <ion-input formControlName="UserName" type="text"></ion-input>
       </ion-item>
 
       <ion-item color="primary">
-        <ion-icon slot="start" color="light" name="lock-closed"></ion-icon>
-        <ion-label position="floating" color="light">Password</ion-label>
-        <ion-input formControlName="Password" color="light" type="password"></ion-input>
+        <ion-icon slot="start" name="lock-closed"></ion-icon>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input formControlName="Password" type="password"></ion-input>
       </ion-item>
 
       <ion-item [hidden]="!isSignup" color="primary">
-        <ion-icon slot="start" color="light" name="lock-closed"></ion-icon>
-        <ion-label position="floating" color="light">Confirm Password</ion-label>
-        <ion-input formControlName="ConfirmPassword" color="light" type="password"></ion-input>
+        <ion-icon slot="start"  name="lock-closed"></ion-icon>
+        <ion-label position="floating">Confirm Password</ion-label>
+        <ion-input formControlName="ConfirmPassword" type="password"></ion-input>
       </ion-item>
     </ion-list>
+ 
     <ion-button color="dark" [hidden]="isSignup" type="submit" class="ion-margin-top ion-margin-buttom" expand="block"
-      shape="round">Sign
-      In</ion-button>
+      shape="round">Sign In</ion-button>
 
     <ion-button color="dark" type="submit" [hidden]="!isSignup" class="ion-margin-top ion-margin-buttom" expand="block"
-      shape="round"> Signup </ion-button>
+      shape="round"> Sign Up </ion-button>
 
-    <ion-button class="ion-margin-top" [hidden]="isSignup" (click)="changePageState()" color="light" expand="block"
-      shape="round">Create Account
-    </ion-button>
-    <ion-button class="ion-margin-top" [hidden]="!isSignup" (click)="changePageState()" color="light" expand="block"
-      shape="round">Signin
-    </ion-button>
+    <ion-button color="light" class="ion-margin-top" [hidden]="isSignup" (click)="changePageState()"  expand="block"
+      shape="round">Create Account</ion-button>
+    <ion-button color="light" class="ion-margin-top" [hidden]="!isSignup" (click)="changePageState()"  expand="block"
+      shape="round">Sign In</ion-button>
 
   </form>
 </ion-content>

@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title> Image View</ion-title>
+    <ion-buttons slot="end" (click)="this.publicService.killModuleControlar()">
+      <ion-icon name="chevron-forward"></ion-icon>
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+ <ion-content fullscreen class="ion-padding" color="primary">
+   
+  <img style="width: 100%;" *ngIf="expense" 
+    [src]="sanitizer.bypassSecurityTrustResourceUrl('data:image/' + expense.imageNoteFormat + ';' + 'base64, ' + expense.imageNote)">
+</ion-content>

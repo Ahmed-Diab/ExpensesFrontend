@@ -9,10 +9,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from './shared/shared.module';
+import { ImageViewComponent } from './image-view/image-view.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ImageViewComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -20,7 +20,6 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     HttpClientModule,
     NgxChartsModule,
-    SharedModule,
     BrowserAnimationsModule
   ],
   providers: [

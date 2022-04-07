@@ -1,19 +1,58 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
-    <ion-title>
-      Expenses
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title> Expenses </ion-title>
   </ion-toolbar>
 </ion-header>
 
 
-<ion-content [fullscreen]="true">
-  <ion-card *ngFor="let expense of expenses">
+<ion-content [fullscreen]="true" class="ion-padding" color="primary">
+
+  <ion-grid fixed>
+    <ion-row *ngFor="let expense of expenses">
+      <ion-col size="12">
+        Exp. Category : {{expense.category.name}}
+      </ion-col>
+      <ion-col size="12">
+        Amount : {{expense.amount}}
+      </ion-col>
+      <ion-col size="12">
+        Note : {{expense.textNote}}
+      </ion-col>
+      <ion-col size="12">
+        Date :{{expense.createdAt | date :'dd-MM-yyyy'}}
+      </ion-col>
+      <ion-col size="6" *ngIf="expense.imageNote">
+        Image :
+      </ion-col>
+      <ion-col size="6" *ngIf="expense.imageNote" class="ion-text-right">
+        <img (click)="displayImage( expense)"
+          [src]="sanitizer.bypassSecurityTrustResourceUrl('data:image/' + expense.imageNoteFormat + ';' + 'base64, ' + expense.imageNote)"
+          alt="" srcset="" style="max-width: 25px;">
+      </ion-col>
+      <ion-col size="8">
+      </ion-col>
+      <ion-col size="2">
+        <div>
+          <ion-icon name="trash-outline" (click)="confirmDeleteMessage(expense)" color="light" slot="icon-only">
+          </ion-icon>
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <div>
+          <ion-icon name="create" (click)="updateExpense(expense)" color="light" slot="icon-only"></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- <ion-card *ngFor="let expense of expenses">
+
+
+
     <img *ngIf="expense.imageNote"
       [src]="sanitizer.bypassSecurityTrustResourceUrl('data:image/' + expense.imageNoteFormat + ';' + 'base64, ' + expense.imageNote)"
       alt="" srcset="" style="max-width: 65%;">
      <ion-card-header>
-      <ion-card-title> Exp. Category : {{expense.category.name}}</ion-card-title>
+      <ion-card-title></ion-card-title>
       <ion-card-title> Amount : {{expense.amount}}</ion-card-title>
       <ion-card-title> Note : {{expense.textNote}}</ion-card-title>
       <ion-card-title> Date :{{expense.createdAt | date :'dd-MM-yyyy'}} </ion-card-title>
@@ -22,17 +61,17 @@
           <ion-button slot="end" (click)="confirmDeleteMessage(expense)" fill="clear" color="danger">
             <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
           </ion-button>
-          <ion-button slot="end" (click)="updateExpense(expense)" fill="clear" color="primary">
+          <ion-button slot="end" (click)="updateExpense(expense)" fill="clear" color="dark">
             <ion-icon name="create" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-item>
       </ion-card-title>
     </ion-card-header>
-  </ion-card>
+  </ion-card> -->
 </ion-content>
 
 <ion-fab vertical="bottom" (click)="addNewExpense()" horizontal="end" slot="fixed">
-  <ion-fab-button>
-    <ion-icon name="add"></ion-icon>
+  <ion-fab-button color="dark">
+    <ion-icon name="add" color="light"></ion-icon>
   </ion-fab-button>
 </ion-fab>

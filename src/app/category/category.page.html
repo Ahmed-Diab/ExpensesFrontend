@@ -1,25 +1,40 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="dark">
     <ion-title>Expensess Category</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item *ngFor="let category of categories">
-      <ion-label> {{category.name}}</ion-label>
-      <ion-button slot="end" (click)="confirmDeleteMessage(category)" fill="clear" color="danger">
-        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-      </ion-button>
-      <ion-button slot="end" (click)="updateCategory(category)" fill="clear" color="primary">
-        <ion-icon name="create" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
+<ion-content class="ion-padding"  color="primary">
+     <!-- <ion-item *ngFor="let category of categories"> -->
+      <ion-grid fixed >
+        <ion-row *ngFor="let category of categories" >
+          <ion-col size="8"  >
+            <div color="primary">
+              {{category.name | titlecase}}
+            </div>
+          </ion-col>
+          <ion-col size="2">
+            <div>
+              <ion-icon name="trash-outline" (click)="confirmDeleteMessage(category)"  slot="icon-only"></ion-icon>
 
+            </div>
+            <!-- <ion-button slot="end" (click)="confirmDeleteMessage(category)" fill="clear" color="danger"> -->
+            <!-- </ion-button> -->
+          </ion-col>
+          <ion-col size="2">
+            <div>
+              <!-- <ion-button slot="end" (click)="updateCategory(category)" fill="clear" color="primary"> -->
+              <ion-icon name="create" (click)="updateCategory(category)" slot="icon-only"></ion-icon>
+              <!-- </ion-button> -->
+            </div>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  
 
   <ion-fab vertical="bottom" (click)="addNewCategory('ADD')" horizontal="end" slot="fixed">
-    <ion-fab-button>
+    <ion-fab-button  color="dark">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

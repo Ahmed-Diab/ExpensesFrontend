@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Color } from '@swimlane/ngx-charts';
 import { Subscription } from 'rxjs';
 import { PublicService } from '../general/public.service';
 
@@ -11,16 +12,19 @@ import { PublicService } from '../general/public.service';
 export class HomePage implements OnInit {
   @ViewChild("containerRef") containerRef: ElementRef
   single: any[] = [];
-  view: any[] = [400, 320];
+  view: [number, number] = [400, 320];
   // options
   gradient: boolean = true;
   showLegend: boolean = true;
   showLabels: boolean = false;
   isDoughnut: boolean = false;
-  legendPosition: string = 'below';
+  legendPosition: any = 'below';
   dashboardSubscription: Subscription
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  colorScheme: Color = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
+    name: 'colorScheme',
+    selectable: false,
+    group: null
   };
 
   constructor(

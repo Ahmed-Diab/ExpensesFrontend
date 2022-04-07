@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="dark">
     <ion-title>Add New Expenses</ion-title>
     <ion-buttons slot="end" (click)="this.publicService.killModuleControlar()">
       <ion-icon name="chevron-forward"></ion-icon>
@@ -8,11 +8,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="container ion-padding" style="padding-bottom: 50px;">
-    <form (submit)="SaveExpense()">
-      <ion-list>
-        <ion-item>
+<ion-content color="primary" class="ion-padding" >
+     <form (submit)="SaveExpense()" >
+         <ion-item class="ion-padding-top" color="primary">
           <ion-label> Exp Category : </ion-label>
           <ion-select okText="Select" cancelText="Cancel" (ngModelChange)="changeCategory($event)"
             [(ngModel)]="expense.categoryId" name="category">
@@ -20,31 +18,30 @@
           </ion-select>
         </ion-item>
 
-        <ion-item>
-          <ion-label color="primary" position="">
+        <ion-item class="ion-padding-top ion-padding-bottom" color="primary">
+          <ion-label position="">
             <span>Amount :</span>
           </ion-label>
           <ion-input clearInput [(ngModel)]="expense.amount" name="amount" type="number"></ion-input>
         </ion-item>
 
-        <ion-item>
+        <ion-item color="primary">
           <ion-label>Note :</ion-label>
           <ion-textarea [(ngModel)]="expense.textNote" name="textNote"></ion-textarea>
         </ion-item>
-        <ion-item button *ngFor="let f of storedFileNames">
+        <!-- <ion-item button *ngFor="let f of storedFileNames">
           {{f}}
-          <ion-button slot="end" (click)="deleteRecording(f)" fill="clear" color="danger">
-            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          <ion-button slot="end" (click)="deleteRecording(f)" fill="clear" color="dark">
+            <ion-icon name="trash-outline" slot="icon-only" color="dark"></ion-icon>
           </ion-button>
-          <ion-button slot="end" (click)="playFile(f)" fill="clear" color="danger">
-            <ion-icon name="play" slot="icon-only"></ion-icon>
+          <ion-button slot="end" (click)="playFile(f)" fill="clear" color="dark">
+            <ion-icon name="play" slot="icon-only" color="light"></ion-icon>
           </ion-button>
-        </ion-item>
-      </ion-list>
-      <ion-row *ngIf="expense.imageNote">
+        </ion-item> -->
+       <ion-row *ngIf="expense.imageNote" class="ion-padding-top">
         <ion-col size="3" class="col-icon">
            <div>
-               <ion-icon style="" name="trash-outline" slot="icon-only" color="danger" (click)="removeImage()"></ion-icon>
+               <ion-icon name="trash-outline" slot="icon-only" color="light" (click)="removeImage()"></ion-icon>
            </div>
         </ion-col>
 
@@ -54,15 +51,14 @@
             alt="" srcset="">
         </ion-col>
       </ion-row>
-      <ion-col>
-        <ion-button type="submit" expand="block">Save</ion-button>
+      <ion-col class="ion-padding-top ion-padding-bottom">
+        <ion-button type="submit" expand="block" color="dark">Save</ion-button>
       </ion-col>
     </form>
 
-  </div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="addPhotoToGallery()">
-      <ion-icon name="camera"></ion-icon>
+    <ion-fab-button (click)="addPhotoToGallery()"  color="dark">
+      <ion-icon name="camera" color="light"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
